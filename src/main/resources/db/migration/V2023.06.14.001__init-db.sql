@@ -89,22 +89,16 @@ ALTER TABLE customers ADD COLUMN customer_last_name VARCHAR(50);
 
 -- Create the customers table
 CREATE TABLE user_account (
-    id INT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50),
     password VARCHAR(255)
 );
-
-ALTER TABLE user_account
-    DROP COLUMN id;
 
 ALTER TABLE customers
     RENAME COLUMN customer_id TO id;
 
 ALTER TABLE user_account
     ADD COLUMN customer_id BIGINT;
-
-ALTER TABLE user_account
-    ADD PRIMARY KEY (customer_id);
 
 ALTER TABLE user_account
     ADD FOREIGN KEY(customer_id) REFERENCES customers(id);
