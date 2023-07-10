@@ -24,7 +24,8 @@ public class UserAccountService implements UserDetailsService {
 
     @Override
     public UserAccountDto loadUserByUsername(String username) throws UsernameNotFoundException {
-        return accountMapper.mapEntityToDto(userAccountRepository.findUserAccountEntityByUsername(username));
+        UserAccountEntity userAccountEntityByUsername = userAccountRepository.findUserAccountEntityByUsername(username);
+        return accountMapper.mapEntityToDto(userAccountEntityByUsername);
     }
 
     public void createUser(UserDetails user) {
