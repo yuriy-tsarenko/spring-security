@@ -1,31 +1,31 @@
 package com.goit.spring.security.entity.converter;
 
+import com.goit.spring.security.configuration.UserAuthority;
 import jakarta.persistence.AttributeConverter;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class AuthorityConverter implements AttributeConverter<List<SimpleGrantedAuthority>, String> {
+public class AuthorityConverter implements AttributeConverter<List<UserAuthority>, String> {
 
     private static final String DELIMITER = ",";
 
     @Override
-    public String convertToDatabaseColumn(List<SimpleGrantedAuthority> attribute) {
+    public String convertToDatabaseColumn(List<UserAuthority> attribute) {
         return Optional.ofNullable(attribute)
                 .map(authorities -> authorities.stream()
-                        .map(SimpleGrantedAuthority::getAuthority)
+                        .map(UserAuthority::getAuthority)
                         .collect(Collectors.joining(DELIMITER))
                 ).orElse(null);
     }
 
     @Override
-    public List<SimpleGrantedAuthority> convertToEntityAttribute(String dbData) {
+    public List<UserAuthority> convertToEntityAttribute(String dbData) {
         return Optional.ofNullable(dbData)
                 .map(authorities -> Arrays.stream(authorities.split(DELIMITER))
-                        .map(SimpleGrantedAuthority::new)
+                        .map(UserAuthority::new)
                         .collect(Collectors.toList()))
                 .orElse(null);
     }

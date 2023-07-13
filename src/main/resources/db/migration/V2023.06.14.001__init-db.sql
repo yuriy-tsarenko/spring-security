@@ -22,14 +22,14 @@ CREATE TABLE suppliers (
 
 -- Create the categories table
 CREATE TABLE categories (
-    category_id INT PRIMARY KEY,
+    category_id BIGINT PRIMARY KEY,
     category_name VARCHAR(50),
     description VARCHAR(100)
 );
 
 -- Create the products table
 CREATE TABLE products (
-    product_id INT PRIMARY KEY,
+    product_id BIGINT PRIMARY KEY,
     product_name VARCHAR(50),
     supplier_id INT,
     unit_price DECIMAL(10,2),
@@ -114,12 +114,6 @@ ALTER TABLE products
 
 ALTER TABLE categories
     RENAME COLUMN category_id TO id;
-
-ALTER TABLE products
-  MODIFY COLUMN id BIGINT;
-
-ALTER TABLE categories
-  MODIFY COLUMN id BIGINT;
 
 CREATE TABLE product_categories (
     product_id BIGINT,

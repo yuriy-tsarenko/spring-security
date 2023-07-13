@@ -1,19 +1,18 @@
 package com.goit.spring.security.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.goit.spring.security.configuration.UserAuthority;
+import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
-@ToString
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
 public class UserAccountDto implements UserDetails {
 
-    private Long id;
     private String username;
     private String password;
     private CustomerDto customer;
@@ -21,7 +20,7 @@ public class UserAccountDto implements UserDetails {
     private Boolean isAccountNonLocked;
     private Boolean isCredentialsNonExpired;
     private Boolean isEnabled;
-    private List<SimpleGrantedAuthority> authorities;
+    private List<UserAuthority> authorities;
 
     public boolean isAccountNonExpired() {
         return isAccountNonExpired;
@@ -38,9 +37,4 @@ public class UserAccountDto implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
-
-    public List<SimpleGrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
 }
