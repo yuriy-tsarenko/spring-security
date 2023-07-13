@@ -41,7 +41,6 @@ class UserAccountServiceTest {
 
     private UserAccountDto createTestAccountDto(UserAccountEntity accountEntity) {
         UserAccountDto dto = new UserAccountDto();
-        dto.setId(accountEntity.getId());
         dto.setUsername(accountEntity.getUsername());
         return dto;
     }

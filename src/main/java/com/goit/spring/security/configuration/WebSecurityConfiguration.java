@@ -2,12 +2,12 @@ package com.goit.spring.security.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,13 +22,16 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic(Customizer.withDefaults())//BasicAuthenticationFilter
+                .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests((requests) -> {
                             requests
-                                    .requestMatchers(HttpMethod.GET, "/products", "/actuator/**").permitAll()
+                                    .requestMatchers("/actuator/**")
+                                    .permitAll()
                                     .anyRequest()
                                     .authenticated();
                         }
                 )
+                .csrf(CsrfConfigurer::disable)
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .logout(LogoutConfigurer::permitAll);
 
@@ -37,6 +40,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        final int strength = 10;
+        return new BCryptPasswordEncoder(strength);
     }
 }

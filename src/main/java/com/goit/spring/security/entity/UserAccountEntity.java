@@ -1,5 +1,6 @@
 package com.goit.spring.security.entity;
 
+import com.goit.spring.security.configuration.UserAuthority;
 import com.goit.spring.security.entity.converter.AuthorityConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -11,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class UserAccountEntity {
 
     @Column(name = "authorities")
     @Convert(converter = AuthorityConverter.class)
-    private List<SimpleGrantedAuthority> authorities;
+    private List<UserAuthority> authorities;
 
     @OneToOne
     @JoinColumn(name = "customer_id")
@@ -66,7 +66,7 @@ public class UserAccountEntity {
         return isEnabled;
     }
 
-    public List<SimpleGrantedAuthority> getAuthorities() {
+    public List<UserAuthority> getAuthorities() {
         return authorities;
     }
 

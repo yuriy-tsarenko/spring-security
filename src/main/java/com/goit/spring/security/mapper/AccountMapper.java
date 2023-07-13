@@ -19,7 +19,6 @@ public class AccountMapper implements Mapper<UserAccountEntity, UserAccountDto> 
             return null;
         }
         UserAccountDto target = new UserAccountDto();
-        target.setId(source.getId());
         target.setPassword(source.getPassword());
         target.setUsername(source.getUsername());
         target.setIsAccountNonExpired(source.getIsAccountNonExpired());
@@ -37,7 +36,6 @@ public class AccountMapper implements Mapper<UserAccountEntity, UserAccountDto> 
             return null;
         }
         UserAccountEntity target = new UserAccountEntity();
-        target.setId(source.getId());
         target.setPassword(source.getPassword());
         target.setUsername(source.getUsername());
         target.setIsAccountNonExpired(source.getIsAccountNonExpired());
