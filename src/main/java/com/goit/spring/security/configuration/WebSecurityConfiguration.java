@@ -40,6 +40,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        final int strength = 10;
+        return new BCryptPasswordEncoder(strength);
     }
 }
