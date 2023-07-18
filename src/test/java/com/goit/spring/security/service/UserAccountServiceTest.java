@@ -4,23 +4,34 @@ import com.goit.spring.security.dto.UserAccountDto;
 import com.goit.spring.security.entity.UserAccountEntity;
 import com.goit.spring.security.mapper.AccountMapper;
 import com.goit.spring.security.repository.UserAccountRepository;
+import com.goit.spring.security.test.utils.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static com.goit.spring.security.test.utils.TestUtils.PASSWORD_ENCODER;
+import static com.goit.spring.security.test.utils.TestUtils.TEST_PASSWORD;
+import static com.goit.spring.security.test.utils.TestUtils.TEST_USERNAME;
+import static com.goit.spring.security.test.utils.TestUtils.createTestAccount;
+import static com.goit.spring.security.test.utils.TestUtils.createTestAccountDto;
+import static org.mockito.ArgumentMatchers.notNull;
 
 @ExtendWith(MockitoExtension.class)
 class UserAccountServiceTest {
-    private static final String TEST_USERNAME = "test@gmail.com";
 
 
     @Mock
     private UserAccountRepository userAccountRepository;
-    @Mock
-    private AccountMapper accountMapper;
+
+    private final AccountMapper accountMapper = Mockito.spy(new AccountMapper(null));
+    private final PasswordEncoder passwordEncoder = Mockito.spy(TestUtils.PASSWORD_ENCODER);
 
     @InjectMocks
     private UserAccountService userAccountService;
@@ -28,27 +39,38 @@ class UserAccountServiceTest {
     @Test
     void loadUserByUsername() {
         //GIVEN
-        UserAccountEntity accountEntity = createTestAccount();
+        UserAccountEntity accountEntity = createTestAccount(TEST_USERNAME, TEST_PASSWORD);
         UserAccountDto expectedAccount = createTestAccountDto(accountEntity);
         //WHEN
-        Mockito.when(userAccountRepository.findUserAccountEntityByUsername(TEST_USERNAME)).thenReturn(accountEntity);
-        Mockito.when(accountMapper.mapEntityToDto(accountEntity)).thenReturn(expectedAccount);
+        Mockito.when(userAccountRepository.findUserAccountEntityByUsername(TEST_USERNAME))
+                .thenReturn(accountEntity);
         //THEN
         UserAccountDto actualAccount = userAccountService.loadUserByUsername(TEST_USERNAME);
 
         Assertions.assertEquals(expectedAccount.getUsername(), actualAccount.getUsername());
     }
 
-    private UserAccountDto createTestAccountDto(UserAccountEntity accountEntity) {
-        UserAccountDto dto = new UserAccountDto();
-        dto.setUsername(accountEntity.getUsername());
-        return dto;
+    @Test
+    void createUser() {
+        //GIVEN
+        UserAccountDto expectedAccountDto = createTestAccountDto(TEST_USERNAME, TEST_PASSWORD, "ADMIN");
+        UserAccountEntity testAccount = createTestAccount(TEST_USERNAME, TEST_PASSWORD);
+        //WHEN
+        Mockito.when(userAccountRepository.save(notNull()))
+                .thenReturn(testAccount);
+        //THEN
+        UserAccountDto actualAccountDto = userAccountService.createUser(expectedAccountDto);
+
+        Assertions.assertEquals(expectedAccountDto.getUsername(), actualAccountDto.getUsername());
+        Assertions.assertNotEquals(expectedAccountDto.getPassword(), actualAccountDto.getPassword());
+        Assertions.assertTrue(PASSWORD_ENCODER.matches(TEST_PASSWORD, actualAccountDto.getPassword()));
+
+        Mockito.verify(userAccountRepository).save(notNull());
     }
 
-    private UserAccountEntity createTestAccount() {
-        UserAccountEntity accountEntity = new UserAccountEntity();
-        accountEntity.setId(1L);
-        accountEntity.setUsername(TEST_USERNAME);
-        return accountEntity;
+    @ParameterizedTest
+    @CsvSource({"value1", "value2"})
+    void test(String param) {
+        System.out.println(param);
     }
 }

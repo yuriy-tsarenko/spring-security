@@ -17,8 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static com.goit.spring.security.ulils.Constants.ADMIN_PASSWORD;
 import static com.goit.spring.security.ulils.Constants.ADMIN_USERNAME;
