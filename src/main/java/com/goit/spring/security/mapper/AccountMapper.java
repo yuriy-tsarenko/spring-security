@@ -5,6 +5,8 @@ import com.goit.spring.security.entity.UserAccountEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 import static java.util.Objects.isNull;
 
 @Component
@@ -26,7 +28,9 @@ public class AccountMapper implements Mapper<UserAccountEntity, UserAccountDto> 
         target.setIsCredentialsNonExpired(source.getIsCredentialsNonExpired());
         target.setIsEnabled(source.getIsEnabled());
         target.setAuthorities(source.getAuthorities());
-        target.setCustomer(customerMapper.mapEntityToDto(source.getCustomer()));
+        if (Objects.nonNull(source.getCustomer())) {
+            target.setCustomer(customerMapper.mapEntityToDto(source.getCustomer()));
+        }
         return target;
     }
 
@@ -43,7 +47,9 @@ public class AccountMapper implements Mapper<UserAccountEntity, UserAccountDto> 
         target.setIsCredentialsNonExpired(source.getIsCredentialsNonExpired());
         target.setIsEnabled(source.getIsEnabled());
         target.setAuthorities(source.getAuthorities());
-        target.setCustomer(customerMapper.mapDtoToEntity(source.getCustomer()));
+        if (Objects.nonNull(source.getCustomer())) {
+            target.setCustomer(customerMapper.mapDtoToEntity(source.getCustomer()));
+        }
         return target;
     }
 }

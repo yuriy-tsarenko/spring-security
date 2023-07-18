@@ -15,20 +15,22 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1")
+@RequestMapping(DemoController.BASE_PATH)
 @RequiredArgsConstructor
 public class DemoController {
 
+    public static final String BASE_PATH = "/v1/users";
+
     private final UserAccountService userAccountService;
 
-    @GetMapping("/users")
+    @GetMapping
     @Secured({"ADMIN"})
     public List<UserAccountDto> loadAll() {
         log.info("/users invocation");
         return userAccountService.all();
     }
 
-    @PostMapping("/users")
+    @PostMapping
     @Secured({"ADMIN", "SUPER_ADMIN"})
     public UserAccountDto create(@RequestBody UserAccountDto dto) {
         return userAccountService.createUser(dto);

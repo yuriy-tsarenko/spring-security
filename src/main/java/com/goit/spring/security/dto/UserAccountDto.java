@@ -2,17 +2,13 @@ package com.goit.spring.security.dto;
 
 import com.goit.spring.security.configuration.UserAuthority;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 public class UserAccountDto implements UserDetails {
